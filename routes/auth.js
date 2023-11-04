@@ -11,9 +11,12 @@ let success;
 router.post(
   "/createUser",
   [
+    body("usertype", "choose valid user"),
     body("email", "Enter a valid email").isEmail(),
     body("name", "Enter a valid name").isLength({ min: 3 }),
     body("password", "Invalid password").isLength({ min: 8 }),
+    body("confirmpassword", "Invalid password").isLength({ min: 8 }),
+
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -28,8 +31,10 @@ router.post(
     }
     const salt = await bcrypt.genSalt(10);
     const secPass= await bcrypt.hash(req.body.password,salt)
+    
   user = await User
       .create({
+        usertype:req.body.usertype,
         name: req.body.name,
         email: req.body.email,
         password: secPass,
@@ -54,6 +59,7 @@ router.post(
 router.post(
   "/login",
   [
+    body("User type", "Select user type"),
     body("email", "Enter a valid email").isEmail(),
     body("password", "Password Cannot be blank").isLength({ min: 8 }),
   ],
