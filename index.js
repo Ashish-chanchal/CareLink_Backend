@@ -10,8 +10,8 @@ const port = 5000;
 app.use(express.json());
 
 app.use('/api/auth',require('./routes/auth'))
-app.use('/api/notes',require('./routes/notes'))
+app.use('/api/doctors',require('./routes/userdata.js'))
 
 app.listen(port, () => {
-  console.log(`INotebook Backed listening at http://localhost:${port}`)
+  console.log(`CareLInk Backend listening at http://localhost:${port}`)
 })

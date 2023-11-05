@@ -57,9 +57,9 @@ router.post(
 
 // authenticate a user login : no login required
 router.post(
-  "/login",
+  "/loginuser",
   [
-    body("User type", "Select user type"),
+    body("usertype", "Select user type"),
     body("email", "Enter a valid email").isEmail(),
     body("password", "Password Cannot be blank").isLength({ min: 8 }),
   ],
@@ -68,7 +68,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const {email,password}=req.body;
+    const {usertype,email,password}=req.body;
     try {
       let user= await User.findOne({email});
       if(!user){
@@ -88,13 +88,15 @@ router.post(
       }
       const authToken = jwt.sign(data, JWT_SECRET);
       success=true
-      res.json({success,authToken})
+      const usertyp =usertype
+      res.json({success,authToken,usertyp})
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal server error");
     }
   }
 );
+
 // Rout3 : Get loggedin user details: login required 
 router.post(
   "/getuser",fetchuser,
